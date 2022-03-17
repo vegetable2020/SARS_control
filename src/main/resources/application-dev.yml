@@ -1,0 +1,73 @@
+##测试环境
+spring:
+  datasource:
+    #    mysql8需要加时区
+    url: jdbc:mysql://localhost:3306/sars-control?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+#  mvc:
+#    view:
+#      prefix: /
+#      suffix: .html
+
+#慎用热部署，因为热部署是会重启项目，session域会被清除
+#  devtools:
+#    restart:
+#      enabled: true  #设置开启热部署
+#      additional-paths: src/main/java #重启目录
+#      exclude: WEB-INF/**
+#    freemarker:
+#      cache: false    #页面不加载缓存，修改即时生效
+
+
+server:
+  port: 9999
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.unionamn.SARS_control.domain.entity
+  configuration:
+    #驼峰下划线转换
+    map-underscore-to-camel-case: true
+    ##打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #二级缓存
+    cache-enabled: false
+    #
+    jdbc-type-for-null: null
+  global-config:
+    #刷新mapper
+    refresh-mapper: true
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    db-column-underline: true
+    cache-enabled: false
+    #\u6570\u636E\u5E93\u5927\u5199\u4E0B\u5212\u7EBF\u8F6C\u6362
+    capital-mode: true
+
+#允许访问 接口开发文档
+swagger:
+  enable: true
+
+
+#fastdfs配置
+fdfs:
+  so-timeout: 600000
+  connectTimeout: 600
+  thumbImage:             #缩略图生成参数
+    width: 150
+    height: 150
+  pool:
+    jmx-enabled: false
+    max-total: 200
+    max-wait-millis: 30000
+  trackerList:            #TrackerList参数,支持多个
+    - 192.168.136.19:22122
+  visit:
+    url: http://192.168.136.19
+    port: 8888
+
