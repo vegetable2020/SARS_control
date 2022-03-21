@@ -40,11 +40,6 @@ public class UserInfoVO implements Serializable {
     @ApiModelProperty(value = "在惠住址" )
     private String address;
 
-    @ApiModelProperty(value = "离惠日期" )
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate leaveDate;
-
     @ApiModelProperty(value = "来惠日期" )
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

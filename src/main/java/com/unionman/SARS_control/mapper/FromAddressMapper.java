@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.unionman.SARS_control.domain.entity.FromAddress;
 import com.unionman.SARS_control.domain.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @Description:
@@ -12,4 +14,17 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface FromAddressMapper extends BaseMapper<FromAddress> {
+
+    /**
+     * 查询
+     * @param condition
+     * @return
+     */
+    @Select(" select group_concat(user_id) from from_address where is_drop=0 " +
+            " and (address_dtl like concat('%',#{condition},'%') or " +
+            " province like concat('%',#{condition},'%') or " +
+            " city like concat('%',#{condition},'%') or  " +
+            " area like concat('%',#{condition},'%') or " +
+            " concat(province,city,area,address_dtl) like concat('%',#{condition},'%') ) ")
+    String getUserIdConcat(@Param("condition")String condition);
 }

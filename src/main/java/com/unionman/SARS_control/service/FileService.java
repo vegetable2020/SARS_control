@@ -41,7 +41,11 @@ public interface FileService extends IService<FileRecord> {
 
     byte[] downloadByte(String filePath);
 
-
+    /**
+     * 删除无关联文件
+     * @return
+     */
+    Boolean deleteUselessFile();
 
 
 }

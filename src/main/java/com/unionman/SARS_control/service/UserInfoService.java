@@ -1,7 +1,10 @@
 package com.unionman.SARS_control.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.unionman.SARS_control.domain.dto.UserInfoDTO;
+import com.unionman.SARS_control.domain.dto.UserInfoFilterDTO;
 import com.unionman.SARS_control.domain.entity.UserInfo;
 import com.unionman.SARS_control.domain.vo.UserInfoVO;
 
@@ -28,6 +31,14 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     UserInfoVO queryUserInfoByToken(String token);
+
+    /**
+     * 根据条件查找登记信息
+     *
+     * @param userInfoFilterDTO
+     * @return
+     */
+    IPage<UserInfoVO> queryUserInfoByCondition(UserInfoFilterDTO userInfoFilterDTO);
 
     /**
      * 查询所有登记信息

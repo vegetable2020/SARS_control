@@ -1,5 +1,6 @@
 package com.unionman.SARS_control.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadCallback;
@@ -12,16 +13,20 @@ import com.unionman.SARS_control.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.poifs.filesystem.FileMagic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -37,6 +42,11 @@ public class FileServiceImpl extends ServiceImpl<FileRecordMapper, FileRecord> i
     @Autowired
     AppendFileStorageClient appendStorageClient;
 
+    @Value("${fdfs.visit.url}")
+    private String fvu = "";
+    @Value("${fdfs.visit.port}")
+    private String fport = "";
+
 
     /**
      * 上传单个文件
@@ -50,6 +60,7 @@ public class FileServiceImpl extends ServiceImpl<FileRecordMapper, FileRecord> i
         StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(),
                     FilenameUtils.getExtension(file.getOriginalFilename()),null);
         FileRecord fileRecord=new FileRecord();
+        fileRecord.setFileIp(fvu+":"+fport+"/");
         fileRecord.setFileName(file.getOriginalFilename());
         fileRecord.setFilePath(storePath.getFullPath());
         fileRecord.setFileSize(file.getSize());
@@ -117,6 +128,17 @@ public class FileServiceImpl extends ServiceImpl<FileRecordMapper, FileRecord> i
         return r;
     }
 
+    @Override
+    public Boolean deleteUselessFile() {
+        List<FileRecord> fileRecords=this.list(Wrappers.<FileRecord>lambdaQuery()
+                .eq(FileRecord::getIsDrop, 0).isNull(FileRecord::getUserId));
+        for (FileRecord fileRecord:fileRecords){
+            storageClient.deleteFile(fileRecord.getFilePath());
+            fileRecord.setIsDrop(1);
+        }
+        this.updateBatchById(fileRecords);
+        return true;
+    }
 
 
 }

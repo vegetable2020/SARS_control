@@ -25,10 +25,10 @@ import java.time.LocalDateTime;
 public class FromAddress extends Model {
     @TableId(value = "address_id", type = IdType.AUTO)
     @ApiModelProperty(value = "addressId")
-    private Integer addressId;
+    private Long addressId;
 
     @ApiModelProperty(value = "关联的信息id")
-    private Integer userId;
+    private Long userId;
 
     @ApiModelProperty(value = "省code" , required = true)
     @NotEmpty(message = "不能为空")

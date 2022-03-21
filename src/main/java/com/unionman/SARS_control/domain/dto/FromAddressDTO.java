@@ -21,11 +21,11 @@ import javax.validation.constraints.NotNull;
 public class FromAddressDTO {
     @TableId(value = "address_id", type = IdType.AUTO)
     @ApiModelProperty(value = "addressId")
-    private Integer addressId;
+    private Long addressId;
 
     @TableId(value = "user_id")
     @ApiModelProperty(value = "关联的信息id")
-    private Integer userId;
+    private Long userId;
 
     @TableId(value = "province_ode")
     @ApiModelProperty(value = "省code" , required = true)

@@ -30,7 +30,7 @@ import java.time.LocalDate;
 @ColumnWidth(15)
 public class UserInfoExcel {
     @ExcelIgnore
-    private Integer userId;
+    private Long userId;
 
     @ExcelIgnore
     private String token;
@@ -46,9 +46,6 @@ public class UserInfoExcel {
 
     @ExcelProperty("目前在惠住址")
     private String address;
-
-    @ExcelProperty("离惠日期")
-    private String leaveDate;
 
     @ExcelProperty("来惠日期")
     private String comeDate;

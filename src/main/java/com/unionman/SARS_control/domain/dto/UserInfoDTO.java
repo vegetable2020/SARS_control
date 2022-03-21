@@ -27,7 +27,7 @@ import java.util.List;
 @ApiModel("登记人员信息 dto")
 public class UserInfoDTO implements Serializable {
     @ApiModelProperty(value = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @ApiModelProperty(value = "姓名" , required = true)
     @NotBlank(message = "不能为空")
@@ -45,12 +45,6 @@ public class UserInfoDTO implements Serializable {
     @ApiModelProperty(value = "在惠住址" , required = true)
     @NotBlank(message = "不能为空")
     private String address;
-
-    @ApiModelProperty(value = "离惠日期，yyyy-MM-dd" , required = true)
-    @NotNull(message = "不能为空")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate leaveDate;
 
     @ApiModelProperty(value = "来惠日期，yyyy-MM-dd" , required = true )
     @NotNull(message = "不能为空")

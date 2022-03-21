@@ -54,6 +54,24 @@ public class FileController {
 
     }
 
+    @ResponseBody
+    @ApiOperation(value = "删除无用文件" )
+    @PostMapping("/deleteUselessFile")
+    public ResultVO<Boolean> upload(){
+
+        try {
+            fileService.deleteUselessFile();
+            return ResultVO.success();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("删除无用文件失败：" + e.toString());
+            return ResultVO.error(-1,e.getMessage());
+        }
+
+    }
+
+
     @ApiOperation("多文件上传")
     @PostMapping("/uploads")
     public ResultVO<List<String>> multiUpload(@RequestParam("files") MultipartFile[] files){

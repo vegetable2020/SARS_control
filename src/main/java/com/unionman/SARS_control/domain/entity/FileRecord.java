@@ -19,6 +19,8 @@ import lombok.experimental.Accessors;
 public class FileRecord extends Model {
     @TableId(value = "file_id")
     private Long fileId;
+    private Long userId;
+    private String fileIp;
     private String filePath;
     private String fileName;
     private Long fileSize;

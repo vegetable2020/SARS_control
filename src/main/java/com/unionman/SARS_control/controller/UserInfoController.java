@@ -2,11 +2,14 @@ package com.unionman.SARS_control.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.excel.EasyExcel;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.unionman.SARS_control.constant.Constants;
 import com.unionman.SARS_control.constant.ResultEnum;
 import com.unionman.SARS_control.domain.dto.UserInfoDTO;
+import com.unionman.SARS_control.domain.dto.UserInfoFilterDTO;
 import com.unionman.SARS_control.domain.entity.UserInfoExcel;
 import com.unionman.SARS_control.domain.vo.FromAddressVO;
 import com.unionman.SARS_control.domain.vo.ResultVO;
@@ -91,6 +94,20 @@ public class UserInfoController {
         }
     }
 
+    @ResponseBody
+    @ApiOperation(value = "条件查询登记信息")
+    @GetMapping("/queryUserInfo")
+    public ResultVO<IPage<UserInfoVO>> queryUserInfo(UserInfoFilterDTO userInfoFilterDTO) {
+        try {
+            IPage<UserInfoVO> userInfoVOPage = userInfoService.queryUserInfoByCondition(userInfoFilterDTO);
+            return ResultVO.success(userInfoVOPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            return ResultVO.error(-1, e.getMessage());
+        }
+    }
+
     /**
      * 导出excel表格
      *
@@ -98,22 +115,19 @@ public class UserInfoController {
      */
     @GetMapping("/exportToExcel")
     @ApiOperation("导出excel表格")
-    public void exportToExcel(HttpServletResponse response) {
+    public void exportToExcel(HttpServletResponse response,UserInfoFilterDTO userInfoFilterDTO) {
         ServletOutputStream out = null;
         try {
             //文件名
             String filename = "返惠员工信息" + ".xlsx";
 
             List<UserInfoExcel> userInfoExcels = new ArrayList<>();
-            List<UserInfoVO> userInfoVOList = userInfoService.queryUserInfoList();
+            IPage<UserInfoVO> userInfoVOPage = userInfoService.queryUserInfoByCondition(userInfoFilterDTO);
+            List<UserInfoVO> userInfoVOList = userInfoVOPage.getRecords();
             for (UserInfoVO userInfoVO : userInfoVOList) {
                 UserInfoExcel userInfoExcel = new UserInfoExcel();
                 BeanUtil.copyProperties(userInfoVO, userInfoExcel);
-                userInfoExcel.setLeaveDate(userInfoVO.getLeaveDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                 userInfoExcel.setComeDate(userInfoVO.getComeDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                userInfoExcel.setYueKangCode(fvu + ":" + fport + "/" + userInfoExcel.getYueKangCode());
-                userInfoExcel.setTravelCode(fvu + ":" + fport + "/" + userInfoExcel.getTravelCode());
-                userInfoExcel.setLatestNucleicAcidReport(fvu + ":" + fport + "/" + userInfoExcel.getLatestNucleicAcidReport());
                 StringBuilder fromAddressStr = new StringBuilder();
                 List<FromAddressVO> fromAddressVOList=userInfoVO.getFromAddressVOList();
                 for (int i=1;i<=fromAddressVOList.size();i++) {

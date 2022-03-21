@@ -28,7 +28,7 @@ public class UserInfo extends Model {
 
     @TableId(value = "user_id", type = IdType.AUTO)
     @ApiModelProperty(value = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @ApiModelProperty(value = "凭证")
     private String token;
@@ -44,11 +44,6 @@ public class UserInfo extends Model {
 
     @ApiModelProperty(value = "在惠住址" , required = true)
     private String address;
-
-    @ApiModelProperty(value = "离惠日期" , required = true)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate leaveDate;
 
     @ApiModelProperty(value = "来惠日期" , required = true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
@@ -73,6 +68,9 @@ public class UserInfo extends Model {
     @ApiModelProperty(value = "最新核酸报告")
     @NotEmpty(message = "不能为空")
     private String latestNucleicAcidReport;
+
+    @ApiModelProperty(value = "前缀")
+    private String filePath;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime createTime;
